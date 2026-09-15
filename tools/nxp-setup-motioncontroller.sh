@@ -20,6 +20,7 @@ if [ -f conf/local.conf ]; then
     echo ""
     echo "You can now build the following Ubuntu images:"
     echo ""
-    echo "$ bitbake nxp-image-ubuntu"
+    echo "$ bitbake -k nxp-image-ubuntu"
+    echo "$ bitbake -k nxp-image-ubuntu-ros2"
     echo ""
 fi

@@ -3,13 +3,9 @@ require ubuntu-license.inc
 SECTION = "devel"
 
 # Ubuntu 22.04.5 baseline
-SRC_URI[ubuntu.sha256sum] = "075d4abd2817a5023ab0a82f5cb314c5ec0aa64a9c0b40fd3154ca3bfdae979f"
+SRC_URI[sha256sum] = "075d4abd2817a5023ab0a82f5cb314c5ec0aa64a9c0b40fd3154ca3bfdae979f"
 
 require ubuntu-base.inc
-SRC_URI += " \
-	http://https://github.com/ros-infrastructure/ros-apt-source/releases/download/1.2.0/ros2-apt-source_1.2.0.jammy_all.deb;name=ros;unpack=0;subdir=ros2 \
-"
-SRC_URI[ros.sha256sum] = "767884cf4ed03116b9d64438930a832ed854147ae435279a7924dfdf60f94433"
 
 # There are some basic differences between different Ubuntu versions.
 # We try not to address them in the generic recipe
@@ -35,10 +31,6 @@ RPROVIDES:${PN}:ubuntu += " \
 APTGET_EXTRA_PACKAGES += " \
     libdebuginfod1 \
 "
-
-fakeroot do_shell_prepare:append() {
-	cp "${WORKDIR}/ros2/ros2-apt-source_1.2.0.jammy_all.deb" "${D}"/tmp/ros2-apt-source.deb
-}
 
 # Extra packages that Ubuntu will replace and thus enables the use of 
 # Yocto packages such as gstreamer to be used in Ubuntu without package conflitcs
@@ -180,8 +172,3 @@ APTGET_EXTRA_PACKAGES += " \
     freeglut3 \
     libglu1-mesa \
 "
-
-fakeroot aptget_update_end:append() {
-	echo "ROS2 initialization"
-	chroot "${APTGET_CHROOT_DIR}" /usr/bin/dpkg -i /tmp/ros2-apt-source.deb
-}

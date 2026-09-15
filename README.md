@@ -20,9 +20,9 @@ Download the Yocto Project BSP for i.MX
 ------------------------------
 
 ```
-$ mkdir desktop
-$ cd desktop
-$ repo init -u https://github.com/nxp-imx/imx-manifest.git -b imx-linux-mickledore -m imx-6.1.55-2.2.0_desktop.xml
+$ mkdir motioncontroller
+$ cd motioncontroller
+$ repo init -u https://github.com/nxp-auto-linux/auto_yocto_bsp -b release/s32n7_bsp3.0 -m default.xml
 $ repo sync
 ```
 
@@ -32,18 +32,13 @@ Create a _new_ build folder
 If you want to create a _new_ build folder:
 
 ```
-$ DISTRO=imx-desktop-xwayland MACHINE=imx8mpevk source imx-setup-desktop.sh -b build-desktop
+$ source sources/meta-nxp-motioncontroller/tools/nxp-setup-motioncontroller.sh -m s32n79rdbubuntu
 ```
 
 Note: The available build MACHINEs for below boards:
 
-    imx8mpevk -  i.MX8MP-EVK
-    imx8mqevk -  i.MX8MQ-EVK
-    imx8mmevk -  i.MX8MM-EVK
-    imx8mnevk -  i.MX8MN-EVK
-    imx8qmmek -  i.MX8QM-MEK
-    imx8ulpevk -  i.MX8ULP-EVK
-    imx8qxpc0mek -  i.MX8QXP-MEK with silicon revision C0 chip
+    s32n79rdb -  S32N79 RDB
+
 
 Use an _existing_ build folder
 ------------------------------
@@ -51,68 +46,15 @@ Use an _existing_ build folder
 If you want to build in an _existing_ build folder:
 
 ```
-$ cd desktop
-$ source setup-environment build-desktop
+$ cd motioncontroller
+$ source sources/meta-nxp-motioncontroller/tools/setup-environment build_s32n79rdbubuntu_hw-partition-1.2.1
 ```
 
-Build the image for i.MX
+Build the image for s32n79rdb
 ---------------
 
 ```
-$ bitbake imx-image-desktop
-```
-
-
-Download the Yocto Project BSP for Layerscape
-------------------------------
-
-```
-$ mkdir distro
-$ cd distro
-$ repo init -u https://github.com/nxp-qoriq/yocto-sdk.git -b mickledore -m ls-6.1.55-2.2.0_distro.xml
-$ repo sync
-```
-
-Start a layerscape build in distro folder
-------------------------------
-
-```
-$ source  distro-setup-env -m <Machine>
-```
-
-Machine:
-
-    ls1012afrwy
-    ls1012ardb
-    ls1021atwr
-    ls1028ardb
-    ls1043ardb
-    ls1046afrwy
-    ls1046ardb
-    ls1088ardb
-    ls2088ardb
-    lx2160ardb-rev2
-    lx2162aqds
-
-Build the layerscape image
----------------
-
-```
-$ bitbake ls-image-main  # build main image for networking feature
-```
-
-```
-$ bitbake ls-image-desktop  # build desktop image for ls1028a only
-```
-
-```
-$ bitbake ls-image-lite # build lite image with the optimized config
-```
-
-```
-# generate composite firmware for  Layerscape machines
-$ bitbake qoriq-composite-firmware
-$ bitbake generate-boottgz
+$ bitbake -k nxp-image-ubuntu-ros2
 ```
 
 

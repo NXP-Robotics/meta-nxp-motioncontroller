@@ -11,7 +11,7 @@ B = "${S}"
 
 ROOTFS="ubuntu-base-${UBUNTU_TARGET_VERSION}-base-${UBUNTU_TARGET_ARCH}.tar.gz"
 SRC_URI = " \
-	http://cdimage.ubuntu.com/ubuntu-base/releases/${UBUNTU_TARGET_BASEVERSION}/release/${ROOTFS};name=ubuntu;unpack=0;subdir=rootfs \
+	http://cdimage.ubuntu.com/ubuntu-base/releases/${UBUNTU_TARGET_BASEVERSION}/release/${ROOTFS};unpack=0;subdir=rootfs \
 	file://fstab \
 "
 

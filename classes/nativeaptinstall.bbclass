@@ -159,67 +159,85 @@ ${PSEUDO_LOCALSTATEDIR}:\
 ${DPKG_NATIVE}:\
 "
 
-ENV_HOST_PROXIES ?= "http_proxy=${http_proxy}"
+ENV_HOST_PROXIES ?= ""
 APTGET_HOST_PROXIES ?= ""
 APTGET_EXECUTABLE ?= "/usr/bin/apt-get"
 APTGET_DEFAULT_OPTS ?= "-qy -o=Dpkg::Use-Pty=0"
 
+aptget_determine_host_proxies() {
+        ENV_HOST_PROXIES="${ENV_HOST_PROXIES}"
+        if [ -z "$ENV_HOST_PROXIES" ]; then
+                if [ -n "${http_proxy}" ]; then
+                        ENV_HOST_PROXIES="$ENV_HOST_PROXIES http_proxy=${http_proxy}"
+                fi
+                if [ -n "${https_proxy}" ]; then
+                        ENV_HOST_PROXIES="$ENV_HOST_PROXIES https_proxy=${https_proxy}"
+                fi
+                if [ -n "${ftp_proxy}" ]; then
+                        ENV_HOST_PROXIES="$ENV_HOST_PROXIES ftp_proxy=${ftp_proxy}"
+                fi
+        fi
+        export ENV_HOST_PROXIES="$ENV_HOST_PROXIES"
+}
+
 aptget_update_presetvars() {
-	export PSEUDO_PASSWD="${APTGET_CHROOT_DIR}:${STAGING_DIR_NATIVE}"
+        export PSEUDO_PASSWD="${APTGET_CHROOT_DIR}:${STAGING_DIR_NATIVE}"
 
-	# All this depends on the updated pseudo-native with better 
-	# chroot support. Without it, apt-get will fail.
-	export PSEUDO_CHROOT_XTRANSLATION="${PSEUDO_CHROOT_XTRANSLATION}"
-	export PSEUDO_CHROOT_FORCED="${PSEUDO_CHROOT_FORCED}"
-	export PSEUDO_CHROOT_EXCEPTIONS="${PSEUDO_CHROOT_EXCEPTIONS}"
+        # All this depends on the updated pseudo-native with better
+        # chroot support. Without it, apt-get will fail.
+        export PSEUDO_CHROOT_XTRANSLATION="${PSEUDO_CHROOT_XTRANSLATION}"
+        export PSEUDO_CHROOT_FORCED="${PSEUDO_CHROOT_FORCED}"
+        export PSEUDO_CHROOT_EXCEPTIONS="${PSEUDO_CHROOT_EXCEPTIONS}"
 
-	# With this little trick, we can qemu target-side executables
-	# inside pseudo chroot without losing pseudo functionality.
-	# This is a must have for some of the package related scripts
-	# that have to use the target side executables.
-	# This depends on both our pseudo and qemu update
-	export PSEUDO_CHROOT_XPREFIX="${PSEUDO_CHROOT_XPREFIX}"
-	export QEMU_SET_ENV="${QEMU_SET_ENV}"
-	export QEMU_UNSET_ENV="${QEMU_UNSET_ENV}"
-	export QEMU_LIBCSYSCALL="1"
-	#unset QEMU_LD_PREFIX
+        # With this little trick, we can qemu target-side executables
+        # inside pseudo chroot without losing pseudo functionality.
+        # This is a must have for some of the package related scripts
+        # that have to use the target side executables.
+        # This depends on both our pseudo and qemu update
+        export PSEUDO_CHROOT_XPREFIX="${PSEUDO_CHROOT_XPREFIX}"
+        export QEMU_SET_ENV="${QEMU_SET_ENV}"
+        export QEMU_UNSET_ENV="${QEMU_UNSET_ENV}"
+        export QEMU_LIBCSYSCALL="1"
+        #unset QEMU_LD_PREFIX
 
-	# Add any proxies from the host, according to
-	# https://wiki.yoctoproject.org/wiki/Working_Behind_a_Network_Proxy
+        # Add any proxies from the host, according to
+        # https://wiki.yoctoproject.org/wiki/Working_Behind_a_Network_Proxy
         # Note that we split environment setup and rootfs setup!
         # Rootfs proxy setup is only done once in aptget_setup_proxies
         # Environment setup needs to be done every time in
         # aptget_update_presetvars
 
-	ENV_HOST_PROXIES="${ENV_HOST_PROXIES}"
-	while [ -n "$ENV_HOST_PROXIES" ]; do
-		IFS=" =_" read -r proxy_type proxy_string proxy_val ENV_HOST_PROXIES <<END_PROXY
+        aptget_determine_host_proxies
+        while [ -n "$ENV_HOST_PROXIES" ]; do
+                IFS=" " read -r proxy_line ENV_HOST_PROXIES <<END_PROXY
 $ENV_HOST_PROXIES
 END_PROXY
-		if [ "$proxy_string" != "proxy" ]; then
-			# We already warn when setting up the rootfs
+                IFS="=" read -r proxy_name proxy_val <<END_PROXY
+$proxy_line
+END_PROXY
+                IFS="_" read -r proxy_type proxy_string <<END_PROXY
+$proxy_name
+END_PROXY
+                if [ "$proxy_string" != "proxy" ]; then
+                        # We already warn when setting up the rootfs
                         #bbwarn "Invalid proxy \"$proxy\""
-			continue
-		fi
+                        continue
+                fi
 
-		if [ -z "$proxy_val"  ]; then
-			continue
-		fi
-
-		export QEMU_SET_ENV="$QEMU_SET_ENV,${proxy_type}_${proxy_string}=$proxy_val"
-	done
+                export QEMU_SET_ENV="$QEMU_SET_ENV,${proxy_type}_${proxy_string}=$proxy_val"
+        done
 
 }
 
 fakeroot aptget_setup_proxies() {
-	# Add any proxies from the host, according to
-	# https://wiki.yoctoproject.org/wiki/Working_Behind_a_Network_Proxy
+        # Add any proxies from the host, according to
+        # https://wiki.yoctoproject.org/wiki/Working_Behind_a_Network_Proxy
         # Note that we split environment setup and rootfs setup!
         # Rootfs proxy setup is only done once in aptget_setup_proxies
         # Environment setup needs to be done every time in
         # aptget_update_presetvars
 
-	# apt may not be fully configured at this stage
+        # apt may not be fully configured at this stage
         mkdir -p "${APTGET_CHROOT_DIR}/etc/apt/apt.conf.d"
 
         # We use the faketool mechanism to install our proxies in a
@@ -227,39 +245,41 @@ fakeroot aptget_setup_proxies() {
         xf="/__etc_apt_apt.conf.d_01yoctoinstallproxies__"
         rm -f "${APTGET_CHROOT_DIR}$xf"
 
-	ENV_HOST_PROXIES="${ENV_HOST_PROXIES}"
-	while [ -n "$ENV_HOST_PROXIES" ]; do
-		IFS=" =_" read -r proxy_type proxy_string proxy_val ENV_HOST_PROXIES <<END_PROXY
+        aptget_determine_host_proxies
+        while [ -n "$ENV_HOST_PROXIES" ]; do
+                IFS=" " read -r proxy_line ENV_HOST_PROXIES <<END_PROXY
 $ENV_HOST_PROXIES
 END_PROXY
-		if [ "$proxy_string" != "proxy" ]; then
-			bbwarn "Invalid proxy \"$proxy\""
-			continue
-		fi
+                IFS="=" read -r proxy_name proxy_val <<END_PROXY
+$proxy_line
+END_PROXY
+                IFS="_" read -r proxy_type proxy_string <<END_PROXY
+$proxy_name
+END_PROXY
+                if [ "$proxy_string" != "proxy" ]; then
+                        bbwarn "Invalid proxy \"$proxy\""
+                        continue
+                fi
 
-		if [ -z "$proxy_val"  ]; then
-			continue
-		fi
+                # If APTGET_HOST_PROXIES is not defined in local.conf, then
+                # apt.conf is populated using proxy information in ENV_HOST_PROXIES
+                if [ -z "${APTGET_HOST_PROXIES}" ]; then
+                        echo >>"${APTGET_CHROOT_DIR}$xf" "Acquire::$proxy_type::proxy \"$proxy_val/\"; /* Yocto */"
+                fi
+        done
 
-		# If APTGET_HOST_PROXIES is not defined in local.conf, then
-		# apt.conf is populated using proxy information in ENV_HOST_PROXIES
-		if [ -z "${APTGET_HOST_PROXIES}" ]; then
-			echo >>"${APTGET_CHROOT_DIR}$xf" "Acquire::$proxy_type::proxy \"$proxy_val/\"; /* Yocto */"
-		fi
-	done
-
-	APTGET_HOST_PROXIES="${APTGET_HOST_PROXIES}"
-	while [ -n "$APTGET_HOST_PROXIES" ]; do
-		read -r proxy <<END_PROXY
+        APTGET_HOST_PROXIES="${APTGET_HOST_PROXIES}"
+        while [ -n "$APTGET_HOST_PROXIES" ]; do
+                read -r proxy <<END_PROXY
 $APTGET_HOST_PROXIES
 END_PROXY
-		echo >>"${APTGET_CHROOT_DIR}$xf" "$proxy"
-	done
+                echo >>"${APTGET_CHROOT_DIR}$xf" "$proxy"
+        done
 
         if [ ! -e "${APTGET_CHROOT_DIR}$xf" ]; then
-            if [ -f /etc/apt/apt.conf ]; then
-                cp -f /etc/apt/apt.conf "${APTGET_CHROOT_DIR}$xf"
-            fi
+                if [ -f /etc/apt/apt.conf ]; then
+                        cp -f /etc/apt/apt.conf "${APTGET_CHROOT_DIR}$xf"
+                fi
         fi
 
         if [ -e "${APTGET_CHROOT_DIR}$xf" ]; then
@@ -275,7 +295,7 @@ fakeroot aptget_preserve_file() {
         false
 }
 
-aptget_file_is_preserved() {
+fakeroot aptget_file_is_preserved() {
         test -e "${APTGET_CHROOT_DIR}$1.yocto" || test -L "${APTGET_CHROOT_DIR}$1.yocto"
 }
 
@@ -285,7 +305,7 @@ fakeroot aptget_restore_file() {
         fi
 }
 
-aptget_link_is_pointing_to() {
+fakeroot aptget_link_is_pointing_to() {
         test -L "${APTGET_CHROOT_DIR}$1" && test "`readlink ${APTGET_CHROOT_DIR}$1`" = "$2"
 }
 
@@ -428,7 +448,7 @@ for i in \$args; do
                         ;;
                 list-units)
                         echo "UNIT          LOAD   ACTIVE SUB    DESCRIPTION"
-                        echo "rescue.target loaded active active Yoco Installation"
+                        echo "rescue.target loaded active active Yocto Installation"
                         exit 0
                         ;;
                 is-active|is-failed)
@@ -438,7 +458,7 @@ for i in \$args; do
                 daemon-reload|daemon-reexec|reload|restart)
                         exit 0
                         ;;
-                list-sockets|list-tiemrs|status|list-machines)
+                list-sockets|list-timers|status|list-machines)
                         # Silent ok
                         exit 0
                         ;;
@@ -463,7 +483,7 @@ EOF
         fi
         aptget_install_faketool "/usr/bin/dbus-send"    $xf
 
-	if [ "${APTGET_USE_NATIVE_DPKG}" != "0" ]; then
+        if [ "${APTGET_USE_NATIVE_DPKG}" != "0" ]; then
                 # We can speed up specfic operations.
                 xf="/__dpkgwrapper__"
                 cat << EOF >${APTGET_CHROOT_DIR}$xf
@@ -497,77 +517,77 @@ fakeroot aptget_run_aptget() {
 }
 
 fakeroot aptget_populate_cache_from_sstate() {
-	if [ -e "${APTGET_CACHE_DIR}" ]; then
-		mkdir -p "${APTGET_DL_CACHE}"
-		chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} check
-		rsync -d -u -t --include *.deb "${APTGET_DL_CACHE}/" "${APTGET_CACHE_DIR}"
-		chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} check
-	fi
+        if [ -e "${APTGET_CACHE_DIR}" ]; then
+                mkdir -p "${APTGET_DL_CACHE}"
+                chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} check
+                rsync -d -u -t --include *.deb "${APTGET_DL_CACHE}/" "${APTGET_CACHE_DIR}"
+                chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} check
+        fi
 }
 
 fakeroot aptget_save_cache_into_sstate() {
-	if [ -e "${APTGET_CACHE_DIR}" ]; then
-		mkdir -p "${APTGET_DL_CACHE}"
-		chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} check
-		rsync -d -u -t --include *.deb "${APTGET_CACHE_DIR}/" "${APTGET_DL_CACHE}"
-	fi
+        if [ -e "${APTGET_CACHE_DIR}" ]; then
+                mkdir -p "${APTGET_DL_CACHE}"
+                chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} check
+                rsync -d -u -t --include *.deb "${APTGET_CACHE_DIR}/" "${APTGET_DL_CACHE}"
+        fi
 }
 
 fakeroot aptget_update_begin() {
-	# Once the basic rootfs is unpacked, we use the local passwd
-	# information.
-	aptget_update_presetvars;
+        # Once the basic rootfs is unpacked, we use the local passwd
+        # information.
+        aptget_update_presetvars;
 
-	aptgetfailure=0
-	# While we do our installation stunt in qemu land, we also want
-	# to be able to use host side networking configs. This means we
-	# need to protect the host and DNS config. We do a bit of a
-	# convoluted stunt here to hopefully be flexible enough about
-	# different rootfs types.
-	cp "/etc/hosts" "${APTGET_CHROOT_DIR}/__etchosts__"
-	aptget_install_faketool "/etc/hosts" "/__etchosts__"
-	cp "/etc/resolv.conf" "${APTGET_CHROOT_DIR}/__etcresolvconf__"
-	aptget_install_faketool "/etc/resolv.conf" "/__etcresolvconf__"
+        aptgetfailure=0
+        # While we do our installation stunt in qemu land, we also want
+        # to be able to use host side networking configs. This means we
+        # need to protect the host and DNS config. We do a bit of a
+        # convoluted stunt here to hopefully be flexible enough about
+        # different rootfs types.
+        cp "/etc/hosts" "${APTGET_CHROOT_DIR}/__etchosts__"
+        aptget_install_faketool "/etc/hosts" "/__etchosts__"
+        cp "/etc/resolv.conf" "${APTGET_CHROOT_DIR}/__etcresolvconf__"
+        aptget_install_faketool "/etc/resolv.conf" "/__etcresolvconf__"
 
-	# We need to set at least one (dummy) user and we set passwords for all of them.
-	# useradd is not debian, but good enough for now.
-	# Technically, this should be done at image generation time,
-	# but the default Yocto mechanisms are a bit intrusive.
-	# This needs some research. UNDERSTAND AND FIX!
-	# In any case, this needs to run as chroot so that we modify
-	# the proper passwd/group inside pseudo.
-	# The Ubuntu 'adduser' doesn't work because passwd is called
-	# which doesn't like our pseudo root
-	if [ -n "${APTGET_ADD_USERS}" ]; then
-		# Tricky variable hack to get word parsing for Yocto
-		# variables in the shell.
-		x="${APTGET_ADD_USERS}"
-		for user in $x; do
+        # We need to set at least one (dummy) user and we set passwords for all of them.
+        # useradd is not debian, but good enough for now.
+        # Technically, this should be done at image generation time,
+        # but the default Yocto mechanisms are a bit intrusive.
+        # This needs some research. UNDERSTAND AND FIX!
+        # In any case, this needs to run as chroot so that we modify
+        # the proper passwd/group inside pseudo.
+        # The Ubuntu 'adduser' doesn't work because passwd is called
+        # which doesn't like our pseudo root
+        if [ -n "${APTGET_ADD_USERS}" ]; then
+                # Tricky variable hack to get word parsing for Yocto
+                # variables in the shell.
+                x="${APTGET_ADD_USERS}"
+                for user in $x; do
 
-			IFS=':' read -r user_name user_passwd user_shell <<END_USER
+                        IFS=':' read -r user_name user_passwd user_shell <<END_USER
 $user
 END_USER
 
-			if [ -z "$user_name" ]; then
-				bbwarn "Empty user name, skipping."
-				continue
-			fi
-			if [ -z "$user_passwd" ]; then
-				# encrypted empty password
-				user_passwd="BB.jlCwQFvebE"
-			fi
+                        if [ -z "$user_name" ]; then
+                                bbwarn "Empty user name, skipping."
+                                continue
+                        fi
+                        if [ -z "$user_passwd" ]; then
+                                # encrypted empty password
+                                user_passwd="BB.jlCwQFvebE"
+                        fi
 
-			user_shell_opt=""
-			if [ -n "$user_shell" ]; then
-				user_shell_opt="-s $user_shell"
-			fi
+                        user_shell_opt=""
+                        if [ -n "$user_shell" ]; then
+                                user_shell_opt="-s $user_shell"
+                        fi
 
-			if [ -z "`cat ${APTGET_CHROOT_DIR}/etc/passwd | grep $user_name`" ]; then
-				chroot "${APTGET_CHROOT_DIR}" /usr/sbin/useradd -p "$user_passwd" -U -G sudo,users,video,render,audio,dialout -m "$user_name" $user_shell_opt
-			fi
+                        if [ -z "`cat ${APTGET_CHROOT_DIR}/etc/passwd | grep $user_name`" ]; then
+                                chroot "${APTGET_CHROOT_DIR}" /usr/sbin/useradd -p "$user_passwd" -U -G sudo,users,video,render,audio,dialout -m "$user_name" $user_shell_opt
+                        fi
 
-		done
-	fi
+                done
+        fi
 
         # This is magic to fool package installations into thinking
         # good things about our rootfs
@@ -576,7 +596,7 @@ END_USER
         # From this point on, we may need network access
         aptget_setup_proxies
 
-	if [ "${APTGET_USE_NATIVE_DPKG}" != "0" ]; then
+        if [ "${APTGET_USE_NATIVE_DPKG}" != "0" ]; then
                 # We need to establish the proper architecture globally, so
                 # that we do not pick it up from dpkg. We may use a native
                 # dpkg for some things, so we do not want to run into issues
@@ -586,39 +606,39 @@ END_USER
                 echo >"${APTGET_CHROOT_DIR}/etc/apt/apt.conf.d/01yoctoinstallarchitecture" "APT::Architecture \"${APTGET_TARGET_ARCH}\";"
         fi
 
-	# Before we can play with the package manager in any
-	# meaningful way, we need to sync the database.
-	if [ -n "${APTGET_EXTRA_SOURCE_PACKAGES}" ]; then
-		if grep '# deb-src' ${APTGET_CHROOT_DIR}/etc/apt/sources.list; then
-			chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/# deb-src/deb-src/g' /etc/apt/sources.list
-		fi
-	fi
-
-	if [ "${APTGET_EXTRA_PACKAGES_MAIN}" = "1" ]; then
-		cp ${APTGET_CHROOT_DIR}/etc/apt/sources.list ${APTGET_CHROOT_DIR}/etc/apt/sources.list_backup
-
-		# Disable other source providers, only keep main package provider
-		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/main/main #/g' /etc/apt/sources.list
-		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*universe*/#&/g' /etc/apt/sources.list
-		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*multiverse*/#&/g' /etc/apt/sources.list
-		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*restricted*/#&/g' /etc/apt/sources.list
-		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i '/^#.*main #*/s/^#//g' /etc/apt/sources.list
-		chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*deb-src*/#&/g' /etc/apt/sources.list
-
-		if [ -e "${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist" ]; then
-			mv ${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist ${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist_main
-		fi
+        # Before we can play with the package manager in any
+        # meaningful way, we need to sync the database.
+        if [ -n "${APTGET_EXTRA_SOURCE_PACKAGES}" ]; then
+                if grep '# deb-src' ${APTGET_CHROOT_DIR}/etc/apt/sources.list; then
+                        chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/# deb-src/deb-src/g' /etc/apt/sources.list
+                fi
         fi
 
-	# Prepare apt to be generically usable
-	chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} update
+        if [ "${APTGET_EXTRA_PACKAGES_MAIN}" = "1" ]; then
+                cp ${APTGET_CHROOT_DIR}/etc/apt/sources.list ${APTGET_CHROOT_DIR}/etc/apt/sources.list_backup
 
-	chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} --fix-broken install
+                # Disable other source providers, only keep main package provider
+                chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/main/main #/g' /etc/apt/sources.list
+                chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*universe*/#&/g' /etc/apt/sources.list
+                chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*multiverse*/#&/g' /etc/apt/sources.list
+                chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*restricted*/#&/g' /etc/apt/sources.list
+                chroot "${APTGET_CHROOT_DIR}" /bin/sed -i '/^#.*main #*/s/^#//g' /etc/apt/sources.list
+                chroot "${APTGET_CHROOT_DIR}" /bin/sed -i 's/^[^#].*deb-src*/#&/g' /etc/apt/sources.list
 
-	# Yocto environment. If we kept apt packages privately from
-	# a prior run, prepopulate the package cache locally to avoid
-	# costly downloads
-	aptget_populate_cache_from_sstate
+                if [ -e "${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist" ]; then
+                        mv ${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist ${APTGET_CHROOT_DIR}/etc/bindresvport.blacklist_main
+                fi
+        fi
+
+        # Prepare apt to be generically usable
+        chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} update
+
+        chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} --fix-broken install
+
+        # Yocto environment. If we kept apt packages privately from
+        # a prior run, prepopulate the package cache locally to avoid
+        # costly downloads
+        aptget_populate_cache_from_sstate
 
         # See that everything is downloaded first. This is an
         # optimization which will help to avoid failures late in the
@@ -629,89 +649,89 @@ END_USER
         # stages though and can't download everything right away.
         aptget_run_aptget -d install ${APTGET_INIT_FAKETOOLS_PACKAGES} ${APTGET_INIT_PACKAGES}
 
-	if [ -n "${APTGET_INIT_FAKETOOLS_PACKAGES}" ]; then
+        if [ -n "${APTGET_INIT_FAKETOOLS_PACKAGES}" ]; then
                 # Packages used by faketools are installed
                 # individually so that faketools are used at the right
                 # times
-		x="${APTGET_INIT_FAKETOOLS_PACKAGES}"
-		for i in $x; do
+                x="${APTGET_INIT_FAKETOOLS_PACKAGES}"
+                for i in $x; do
                         aptget_run_aptget install $i
                 done
-	fi
-	if [ -n "${APTGET_INIT_PACKAGES}" ]; then
+        fi
+        if [ -n "${APTGET_INIT_PACKAGES}" ]; then
                 aptget_run_aptget install ${APTGET_INIT_PACKAGES}
-	fi
+        fi
 
-	if [ -n "${APTGET_EXTRA_PPA}" ]; then
-		DISTRO_NAME=`grep "DISTRIB_CODENAME=" "${APTGET_CHROOT_DIR}/etc/lsb-release" | sed "s/DISTRIB_CODENAME=//g"`
-		DISTRO_RELEASE=`grep "DISTRIB_RELEASE=" "${APTGET_CHROOT_DIR}/etc/lsb-release" | sed "s/DISTRIB_RELEASE=//g"`
+        if [ -n "${APTGET_EXTRA_PPA}" ]; then
+                DISTRO_NAME=`grep "DISTRIB_CODENAME=" "${APTGET_CHROOT_DIR}/etc/lsb-release" | sed "s/DISTRIB_CODENAME=//g"`
+                DISTRO_RELEASE=`grep "DISTRIB_RELEASE=" "${APTGET_CHROOT_DIR}/etc/lsb-release" | sed "s/DISTRIB_RELEASE=//g"`
 
-		if [ -z "$DISTRO_NAME" ]; then 
-			bberror "Unable to get target linux distribution codename. Please check that \"${APTGET_CHROOT_DIR}/etc/lsb-release\" is not corrupted."
-		fi
+                if [ -z "$DISTRO_NAME" ]; then
+                        bberror "Unable to get target linux distribution codename. Please check that \"${APTGET_CHROOT_DIR}/etc/lsb-release\" is not corrupted."
+                fi
 
-		# For apt-key to be reliable, we need both gpg and dirmngr
-		# As workaround for an 18.04 gpg regressions, we also use curl
+                # For apt-key to be reliable, we need both gpg and dirmngr
+                # As workaround for an 18.04 gpg regressions, we also use curl
                 # In fact, for now we use it generally, because gpg can't
                 # talk to dirmngr properly in the emulated environment.
                 # This needs to be debugged (FIX!), but the curl method
                 # works, too.
-		APTGET_GPG_BROKEN="1"
-		if [ "$DISTRO_RELEASE" = "18.04" ]; then
-			APTGET_GPG_BROKEN="1"
-		fi
-		if [ -n "$APTGET_GPG_BROKEN" ]; then
-			x="gnupg curl"
-		else
-			x="gnupg dirmngr"
-		fi
+                APTGET_GPG_BROKEN="1"
+                if [ "$DISTRO_RELEASE" = "18.04" ]; then
+                APTGET_GPG_BROKEN="1"
+                fi
+                if [ -n "$APTGET_GPG_BROKEN" ]; then
+                        x="gnupg curl"
+                else
+                        x="gnupg dirmngr"
+                fi
                 aptget_run_aptget install $x
 
-		# Tricky variable hack to get word parsing for Yocto
-		# variables in the shell.
-		x="${APTGET_EXTRA_PPA}"
-		for ppa in $x; do
-			IFS=';' read -r ppa_addr ppa_server ppa_hash ppa_type ppa_file_orig <<END_PPA
+                # Tricky variable hack to get word parsing for Yocto
+                # variables in the shell.
+                x="${APTGET_EXTRA_PPA}"
+                for ppa in $x; do
+                        IFS=';' read -r ppa_addr ppa_server ppa_hash ppa_type ppa_file_orig <<END_PPA
 $ppa
 END_PPA
 
-			if [ "`echo $ppa_addr | head -c 4`" = "ppa:" ]; then
-				chroot "${APTGET_CHROOT_DIR}" /usr/bin/add-apt-repository -y -s $ppa_addr
-				continue;
-			fi
+                        if [ "`echo $ppa_addr | head -c 4`" = "ppa:" ]; then
+                                chroot "${APTGET_CHROOT_DIR}" /usr/bin/add-apt-repository -y -s $ppa_addr
+                                continue;
+                        fi
 
-			if [ -z "$ppa_type" ]; then
-				ppa_type="deb"
-			fi
-			if [ -n "$ppa_file_orig" ]; then
-				ppa_file="/etc/apt/sources.list.d/$ppa_file_orig"
-			else
-				ppa_file="/etc/apt/sources.list"
-			fi
-			ppa_proxy=""
-			if [ -n "$ENV_HTTP_PROXY" ]; then
-				if [ -n "$APTGET_GPG_BROKEN" ]; then
-					ppa_proxy="-proxy=$ENV_HTTP_PROXY"
-				else
-					ppa_proxy="--keyserver-options http-proxy=$ENV_HTTP_PROXY"
-				fi
-			fi
+                        if [ -z "$ppa_type" ]; then
+                                ppa_type="deb"
+                        fi
+                        if [ -n "$ppa_file_orig" ]; then
+                                ppa_file="/etc/apt/sources.list.d/$ppa_file_orig"
+                        else
+                                ppa_file="/etc/apt/sources.list"
+                        fi
+                        ppa_proxy=""
+                        if [ -n "$ENV_HTTP_PROXY" ]; then
+                                if [ -n "$APTGET_GPG_BROKEN" ]; then
+                                        ppa_proxy="-proxy=$ENV_HTTP_PROXY"
+                                else
+                                        ppa_proxy="--keyserver-options http-proxy=$ENV_HTTP_PROXY"
+                                fi
+                        fi
 
-			echo >>"${APTGET_CHROOT_DIR}/$ppa_file" "$ppa_type $ppa_addr $DISTRO_NAME main"
-			if [ -n "$APTGET_GPG_BROKEN" ]; then
-				HTTPPPASERVER=`echo $ppa_server | sed "s/hkp:/http:/g"`
-				mkdir -p "${APTGET_CHROOT_DIR}/tmp/gpg"
+                        echo >>"${APTGET_CHROOT_DIR}/$ppa_file" "$ppa_type $ppa_addr $DISTRO_NAME main"
+                        if [ -n "$APTGET_GPG_BROKEN" ]; then
+                                HTTPPPASERVER=`echo $ppa_server | sed "s/hkp:/http:/g"`
+                                mkdir -p "${APTGET_CHROOT_DIR}/tmp/gpg"
                                 mkdir -p "${APTGET_CHROOT_DIR}/etc/apt/trusted.gpg.d/"
-				chmod 0600 "${APTGET_CHROOT_DIR}/tmp/gpg"
-				chroot "${APTGET_CHROOT_DIR}" /usr/bin/curl -sL "$HTTPPPASERVER/pks/lookup?op=get&search=0x$ppa_hash" | chroot "${APTGET_CHROOT_DIR}" /usr/bin/gpg --homedir /tmp/gpg --import || true
-				chroot "${APTGET_CHROOT_DIR}" /usr/bin/gpg --homedir /tmp/gpg --export $ppa_hash > "${APTGET_CHROOT_DIR}/etc/apt/trusted.gpg.d/$ppa_file_orig.gpg"
-				rm -rf "${APTGET_CHROOT_DIR}/tmp/gpg"
-			else
-				chroot "${APTGET_CHROOT_DIR}" /usr/bin/apt-key adv --keyserver $ppa_server $ppa_proxy --recv-key $ppa_hash
-			fi
-		done
+                                chmod 0600 "${APTGET_CHROOT_DIR}/tmp/gpg"
+                                chroot "${APTGET_CHROOT_DIR}" /usr/bin/curl -sL "$HTTPPPASERVER/pks/lookup?op=get&search=0x$ppa_hash" | chroot "${APTGET_CHROOT_DIR}" /usr/bin/gpg --homedir /tmp/gpg --import || true
+                                chroot "${APTGET_CHROOT_DIR}" /usr/bin/gpg --homedir /tmp/gpg --export $ppa_hash > "${APTGET_CHROOT_DIR}/etc/apt/trusted.gpg.d/$ppa_file_orig.gpg"
+                                rm -rf "${APTGET_CHROOT_DIR}/tmp/gpg"
+                        else
+                                chroot "${APTGET_CHROOT_DIR}" /usr/bin/apt-key adv --keyserver $ppa_server $ppa_proxy --recv-key $ppa_hash
+                        fi
+                done
                 chroot "${APTGET_CHROOT_DIR}" ${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} update
-	fi
+        fi
 
         # After the PPA has been set up, download everything else.
         aptget_run_aptget -d install ${APTGET_REMAINING_FAKETOOLS_PACKAGES} \
@@ -727,69 +747,69 @@ END_PPA
                 aptget_run_aptget install $i
         done
 
-	if [ "${APTGET_SKIP_UPGRADE}" = "0" ]; then
-		aptget_run_aptget -f install
-		aptget_run_aptget upgrade
-	fi
-
-	if [ "${APTGET_SKIP_FULLUPGRADE}" = "0" ]; then
+        if [ "${APTGET_SKIP_UPGRADE}" = "0" ]; then
                 aptget_run_aptget -f install
-		aptget_run_aptget full-upgrade
-	fi
+                aptget_run_aptget upgrade
+        fi
 
-	if [ -n "${APTGET_EXTRA_PACKAGES_SERVICES_DISABLED}" ]; then
-		# workaround - deny (re)starting of services, for selected packages, since
-		# they will make the installation fail
+        if [ "${APTGET_SKIP_FULLUPGRADE}" = "0" ]; then
+                aptget_run_aptget -f install
+                aptget_run_aptget full-upgrade
+        fi
+
+        if [ -n "${APTGET_EXTRA_PACKAGES_SERVICES_DISABLED}" ]; then
+                # workaround - deny (re)starting of services, for selected packages, since
+                # they will make the installation fail
                 echo  >"${APTGET_CHROOT_DIR}/__usrsbinpolicy-rc.d__" "#!/bin/sh"
                 echo >>"${APTGET_CHROOT_DIR}/__usrsbinpolicy-rc.d__" "exit 101"
                 chmod a+x "${APTGET_CHROOT_DIR}/__usrsbinpolicy-rc.d__"
                 aptget_always_install_faketool "/usr/sbin/policy-rc.d" "/__usrsbinpolicy-rc.d__"
 
-		aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_SERVICES_DISABLED}
+                aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_SERVICES_DISABLED}
 
-		# remove the workaround
+                # remove the workaround
                 aptget_delete_faketool "/usr/sbin/policy-rc.d" "/__usrsbinpolicy-rc.d__"
-	fi
+        fi
 
-	if [ -n "${APTGET_EXTRA_PACKAGES}" ]; then
+        if [ -n "${APTGET_EXTRA_PACKAGES}" ]; then
                 aptget_run_aptget install ${APTGET_EXTRA_PACKAGES}
-	fi
+        fi
 
-	if [ -n "${APTGET_EXTRA_SOURCE_PACKAGES}" ]; then
-		# We need this to get source package handling properly
-		# configured for a subsequent apt-get source
-		aptget_run_aptget install dpkg-dev
+        if [ -n "${APTGET_EXTRA_SOURCE_PACKAGES}" ]; then
+                # We need this to get source package handling properly
+                # configured for a subsequent apt-get source
+                aptget_run_aptget install dpkg-dev
 
-		# For lack of a better idea, we install source packages
-		# into the root user's home. if we could guarantee that
-		# they are all read only, /opt might be a good place.
-		# But we can't guarantee that.
-		# Net result is that we use an ugly hack to overcome
-		# the chroot directory problem.
-		echo  >"${APTGET_CHROOT_DIR}/aptgetsource.sh" "#!/bin/sh"
-		echo >>"${APTGET_CHROOT_DIR}/aptgetsource.sh" "cd \$1"
-		echo >>"${APTGET_CHROOT_DIR}/aptgetsource.sh" "${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} source \$2"
-		x="${APTGET_EXTRA_SOURCE_PACKAGES}"
-		for i in $x; do
-			test $aptgetfailure -ne 0 || chroot "${APTGET_CHROOT_DIR}" /bin/bash /aptgetsource.sh "/root" "${i}" || aptgetfailure=1
-		done
-		rm -f "${APTGET_CHROOT_DIR}/aptgetsource.sh"
-	fi
+                # For lack of a better idea, we install source packages
+                # into the root user's home. if we could guarantee that
+                # they are all read only, /opt might be a good place.
+                # But we can't guarantee that.
+                # Net result is that we use an ugly hack to overcome
+                # the chroot directory problem.
+                echo  >"${APTGET_CHROOT_DIR}/aptgetsource.sh" "#!/bin/sh"
+                echo >>"${APTGET_CHROOT_DIR}/aptgetsource.sh" "cd \$1"
+                echo >>"${APTGET_CHROOT_DIR}/aptgetsource.sh" "${APTGET_EXECUTABLE} ${APTGET_DEFAULT_OPTS} source \$2"
+                x="${APTGET_EXTRA_SOURCE_PACKAGES}"
+                for i in $x; do
+                        test $aptgetfailure -ne 0 || chroot "${APTGET_CHROOT_DIR}" /bin/bash /aptgetsource.sh "/root" "${i}" || aptgetfailure=1
+                done
+                rm -f "${APTGET_CHROOT_DIR}/aptgetsource.sh"
+        fi
 
-	# Once we have done the installation, save off the package
-	# cache locally for repeated use of recipe building
-	# We also try to save the cache in case of package install errors
-	# to avoid downloads on a subsequent attempt
-	aptget_save_cache_into_sstate
+        # Once we have done the installation, save off the package
+        # cache locally for repeated use of recipe building
+        # We also try to save the cache in case of package install errors
+        # to avoid downloads on a subsequent attempt
+        aptget_save_cache_into_sstate
 
-	if [ -n "${APTGET_EXTRA_PACKAGES_DESKTOP}" ]; then
-		aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_DESKTOP}
-	fi
+        if [ -n "${APTGET_EXTRA_PACKAGES_DESKTOP}" ]; then
+                aptget_run_aptget install ${APTGET_EXTRA_PACKAGES_DESKTOP}
+        fi
 
-	if [ $aptgetfailure -ne 0 ]; then
-		bberror "${APTGET_EXECUTABLE} failed to execute as expected!"
-		return $aptgetfailure
-	fi
+        if [ $aptgetfailure -ne 0 ]; then
+                bberror "${APTGET_EXECUTABLE} failed to execute as expected!"
+                return $aptgetfailure
+        fi
 
         if [ -e "${APTGET_CHROOT_DIR}/usr/bin/python3" ]; then
             if [ ! -e "${APTGET_CHROOT_DIR}/usr/bin/python" ]; then
@@ -801,16 +821,19 @@ END_PPA
             fi
         fi
 
-	# The list of installed packages goes into the log
-	echo "Installed packages:"
-	chroot "${APTGET_CHROOT_DIR}" /usr/bin/dpkg -l | grep '^ii' | awk '{print $2}'
+        # The list of installed packages goes into the log
+        echo ""
+        echo "Installed packages:"
+        echo "==================="
+        chroot "${APTGET_CHROOT_DIR}" /usr/bin/dpkg -l | grep '^ii' | awk '{print $2}'
+        echo ""
 }
 
 # Must have to preset all variables properly. It also means that
 # the user of this class should not prepend to avoid ordering issues.
 fakeroot do_aptget_user_update:prepend() {
 
-	aptget_update_presetvars;
+        aptget_update_presetvars;
 }
 
 # empty placeholder, override it in parent script for more functionality
