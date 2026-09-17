@@ -32,7 +32,24 @@ ROS2_PACKAGES += " ros-${ROS2_DISTRO}-desktop ros-dev-tools"
 
 # Added ROS2 packages for Motion Control
 ROS2_PACKAGES += " \
-    ros-${ROS2_DISTRO}-moveit-* ros-${ROS2_DISTRO}-pinocchio \
+    ros-${ROS2_DISTRO}-moveit-chomp-*        \
+    ros-${ROS2_DISTRO}-moveit-common         \
+    ros-${ROS2_DISTRO}-moveit-configs-utils  \
+    ros-${ROS2_DISTRO}-moveit-core-*         \
+    ros-${ROS2_DISTRO}-moveit-hybrid-*       \
+    ros-${ROS2_DISTRO}-moveit-kinematics-*   \
+    ros-${ROS2_DISTRO}-moveit-msgs-*         \
+    ros-${ROS2_DISTRO}-moveit-planners-*     \
+    ros-${ROS2_DISTRO}-moveit-plugins        \
+    ros-${ROS2_DISTRO}-moveit-py-*           \
+    ros-${ROS2_DISTRO}-moveit-resources-*    \
+    ros-${ROS2_DISTRO}-moveit-ros-*          \
+    ros-${ROS2_DISTRO}-moveit-runtime        \
+    ros-${ROS2_DISTRO}-moveit-servo-*        \
+    ros-${ROS2_DISTRO}-moveit-setup-*        \
+    ros-${ROS2_DISTRO}-moveit-simple-*       \
+    ros-${ROS2_DISTRO}-moveit-visual-*       \
+    ros-${ROS2_DISTRO}-pinocchio \
 "
 
 # Added ROS2 packages for SLAM and Navigation
