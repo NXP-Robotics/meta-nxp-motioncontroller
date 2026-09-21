@@ -29,10 +29,16 @@ $ repo sync
 Create a _new_ build folder
 ---------------------------
 
-If you want to create a _new_ build folder:
+If you want to create a _new_ build folder for Ubuntu 22.04 (Jammy) with ROS 2 Humble:
 
 ```
-$ source sources/meta-nxp-motioncontroller/tools/nxp-setup-motioncontroller.sh -m s32n79rdbubuntu
+$ source sources/meta-nxp-motioncontroller/meta-jammy-humble/tools/nxp-setup-motioncontroller.sh -m s32n79rdbubuntu
+```
+
+or Ubutu 24.04 (Noble) with ROS 2 Jazzy:
+
+```
+$ source sources/meta-nxp-motioncontroller/meta-noble-jazzy/tools/nxp-setup-motioncontroller.sh -m s32n79rdbubuntu
 ```
 
 Note: The available build MACHINEs for below boards:
@@ -43,11 +49,17 @@ Note: The available build MACHINEs for below boards:
 Use an _existing_ build folder
 ------------------------------
 
-If you want to build in an _existing_ build folder:
+If you want to build in an _existing_ build folder for Ubuntu 22.04 (Jammy) with ROS 2 Humble:
 
 ```
 $ cd motioncontroller
-$ source sources/meta-nxp-motioncontroller/tools/setup-environment build_s32n79rdbubuntu_hw-partition-1.2.1
+$ source sources/meta-nxp-motioncontroller/meta-jammy-humble/tools/setup-environment build_s32n79rdbubuntu_hw-partition-1.2.1
+```
+
+or Ubutu 24.04 (Noble) with ROS 2 Jazzy:
+
+```
+$ source sources/meta-nxp-motioncontroller/meta-noble-jazzy/tools/setup-environment build_s32n79rdbubuntu_hw-partition-1.2.1
 ```
 
 Build the image for s32n79rdb

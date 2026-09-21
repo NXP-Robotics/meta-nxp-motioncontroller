@@ -1,0 +1,133 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 11 Nov 2022 17:32:25 +0100
+Subject: [PATCH 6/7] qemu-user: builtin strace much more comprehensive
+
+This could be considered cosmetic but was invaluable in debugging
+syscall handling problems with qemu user mode emulation.
+
+Note: rebased for scarthgap qemu 8.2.7. Several upstream improvements
+made many of the original changes obsolete (e.g. signal name lookup
+via target_signal_name[] array, print_file_mode early-return for
+mode==0). Only the still-needed changes are kept.
+
+Upstream-Status: Inappropriate [NXP S32 / ubuntu rootfs support only]
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/strace.c    | 34 ++++++++++++++++++++++++++++++++++
+ linux-user/strace.list | 14 +++++++-------
+ 2 files changed, 41 insertions(+), 7 deletions(-)
+
+diff --git a/linux-user/strace.c b/linux-user/strace.c
+--- a/linux-user/strace.c
++++ b/linux-user/strace.c
+@@ -3846,6 +3846,23 @@
+ }
+ #endif
+ 
++#if defined(TARGET_NR_mremap)
++static void
++print_mremap(const struct syscallname *name,
++    abi_long arg0, abi_long arg1, abi_long arg2,
++    abi_long arg3, abi_long arg4, abi_long arg5)
++{
++    print_syscall_prologue(name);
++    print_pointer(arg0, 0);
++    print_raw_param("%d", arg1, 0);
++    print_pointer(arg2, 0);
++    print_raw_param("%d", arg3, 0);
++    print_raw_param("%d", arg4, 0);
++    print_raw_param("%#x", arg5, 1);
++    print_syscall_epilogue(name);
++}
++#endif
++
+ #ifdef TARGET_NR_mprotect
+ static void
+ print_mprotect(CPUArchState *cpu_env, const struct syscallname *name,
+@@ -4062,6 +4079,20 @@
+     print_syscall_epilogue(name);
+ }
+ #endif
++
++#ifdef TARGET_NR_seccomp
++static void
++print_seccomp(const struct syscallname *name,
++    abi_long arg0, abi_long arg1, abi_long arg2,
++    abi_long arg3, abi_long arg4, abi_long arg5)
++{
++    print_syscall_prologue(name);
++    print_raw_param("%d", arg0, 0);
++    print_raw_param("%d", arg1, 0);
++    print_pointer(arg2, 1);
++    print_syscall_epilogue(name);
++}
++#endif
+ 
+ #if defined(TARGET_NR_pread64) || defined(TARGET_NR_pwrite64)
+ static void
+
+diff --git a/linux-user/strace.list b/linux-user/strace.list
+--- a/linux-user/strace.list
++++ b/linux-user/strace.list
+@@ -306,19 +306,19 @@
+ { TARGET_NR_getegid, "getegid" , "%s()", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_getegid32
+-{ TARGET_NR_getegid32, "getegid32" , NULL, NULL, NULL },
++{ TARGET_NR_getegid32, "getegid32" , "%s()", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_geteuid
+ { TARGET_NR_geteuid, "geteuid" , "%s()", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_geteuid32
+-{ TARGET_NR_geteuid32, "geteuid32" , NULL, NULL, NULL },
++{ TARGET_NR_geteuid32, "geteuid32" , "%s()", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_getgid
+ { TARGET_NR_getgid, "getgid" , "%s()", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_getgid32
+-{ TARGET_NR_getgid32, "getgid32" , NULL, NULL, NULL },
++{ TARGET_NR_getgid32, "getgid32" , "%s()", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_getgroups
+ { TARGET_NR_getgroups, "getgroups" , "%s(%d,%p)", NULL, NULL },
+@@ -416,7 +416,7 @@
+ { TARGET_NR_getuid, "getuid" , "%s()", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_getuid32
+-{ TARGET_NR_getuid32, "getuid32" , NULL, NULL, NULL },
++{ TARGET_NR_getuid32, "getuid32" , "%s()", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_getxattr
+ { TARGET_NR_getxattr, "getxattr" , NULL, print_getxattr, NULL },
+@@ -641,7 +641,7 @@
+ { TARGET_NR_mq_unlink, "mq_unlink" , NULL, print_mq_unlink, NULL },
+ #endif
+ #ifdef TARGET_NR_mremap
+-{ TARGET_NR_mremap, "mremap" , NULL, NULL, NULL },
++{ TARGET_NR_mremap, "mremap" , NULL, print_mremap, print_syscall_ret_addr },
+ #endif
+ #ifdef TARGET_NR_msgctl
+ { TARGET_NR_msgctl, "msgctl" , NULL, NULL, NULL },
+@@ -1090,7 +1090,7 @@
+ { TARGET_NR_profil, "profil" , NULL, NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_pselect6
+-{ TARGET_NR_pselect6, "pselect6" , NULL, NULL, NULL },
++{ TARGET_NR_pselect6, "pselect6" , "%s(%d,%#x,%#x,%#x,%#x,%#x)", NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_ptrace
+ { TARGET_NR_ptrace, "ptrace" , NULL, NULL, NULL },
+@@ -1249,7 +1249,7 @@
+ { TARGET_NR_sched_yield, "sched_yield" , NULL, NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_seccomp
+-{ TARGET_NR_seccomp, "seccomp" , NULL, NULL, NULL },
++{ TARGET_NR_seccomp, "seccomp" , NULL, print_seccomp, NULL },
+ #endif
+ #ifdef TARGET_NR_security
+ { TARGET_NR_security, "security" , NULL, NULL, NULL },
+-- 
+2.34.1

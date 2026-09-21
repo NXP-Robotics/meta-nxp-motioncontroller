@@ -1,0 +1,31 @@
+From de1795b414c511996a42182116d690cac0acea48 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Wed, 9 Nov 2022 09:22:54 +0100
+Subject: [PATCH 7/7] qemu-user: strace didn't print faccessat() correctly
+
+Upstream-Status: Inappropriate [NXP S32 / ubuntu rootfs support only]
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Signed-off-by: Ionut Vicovan <Ionut.Vicovan@nxp.com>
+
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/strace.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/linux-user/strace.c b/linux-user/strace.c
+index b8560b511..a40ed81e1 100644
+--- a/linux-user/strace.c
++++ b/linux-user/strace.c
+@@ -1944,7 +1944,8 @@ print_faccessat(void *cpu_env, const struct syscallname *name,
+     print_at_dirfd(arg0, 0);
+     print_string(arg1, 0);
+     print_flags(access_flags, arg2, 0);
+-    print_flags(at_file_flags, arg3, 1);
++    /* Kernel does not receive arg3! We pretend! */
++    qemu_log("?");
+     print_syscall_epilogue(name);
+ }
+ #endif
+-- 
+2.34.1
+

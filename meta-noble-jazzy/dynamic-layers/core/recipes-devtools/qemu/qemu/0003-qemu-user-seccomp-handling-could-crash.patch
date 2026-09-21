@@ -1,0 +1,51 @@
+From ed1cbef4b1ae31218277fb4e83bbe9604ce24ea4 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Wed, 9 Nov 2022 09:04:37 +0100
+Subject: [PATCH 3/7] qemu-user: seccomp handling could crash
+
+ While it is not implemented properly still, it is now checked for
+and rejected properly.
+
+Upstream-Status: Inappropriate [NXP S32 / ubuntu rootfs support only]
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/syscall.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+index 113c7e24e..6a4fc96cc 100644
+--- a/linux-user/syscall.c
++++ b/linux-user/syscall.c
+@@ -33,6 +33,7 @@
+ #include <sys/fsuid.h>
+ #include <sys/personality.h>
+ #include <sys/prctl.h>
++#include <linux/seccomp.h>
+ #include <sys/resource.h>
+ #include <sys/swap.h>
+ #include <linux/capability.h>
+@@ -6548,8 +6548,6 @@
+     case PR_GET_FPEMU:
+     case PR_SET_FPEMU:
+     case PR_SET_MM:
+-    case PR_GET_SECCOMP:
+-    case PR_SET_SECCOMP:
+     case PR_SET_SYSCALL_USER_DISPATCH:
+     case PR_GET_THP_DISABLE:
+     case PR_SET_THP_DISABLE:
+@@ -6558,6 +6556,12 @@
+         /* Disable to prevent the target disabling stuff we need. */
+         return -TARGET_EINVAL;
+ 
++    case PR_GET_SECCOMP:
++    case PR_SET_SECCOMP:
++        if (arg2 == SECCOMP_MODE_FILTER)
++            return -TARGET_EINVAL;
++        return get_errno(prctl(option, arg2, arg3, arg4, arg5));
++
+     default:
+         qemu_log_mask(LOG_UNIMP, "Unsupported prctl: " TARGET_ABI_FMT_ld "\n",
+                       option);
+-- 
+2.34.1
+

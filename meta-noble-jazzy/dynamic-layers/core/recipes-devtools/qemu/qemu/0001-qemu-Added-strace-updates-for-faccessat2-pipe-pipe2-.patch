@@ -1,0 +1,141 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+Date: Fri, 11 Nov 2022 17:32:25 +0100
+Subject: [PATCH] qemu: Added strace updates for faccessat2/pipe/pipe2/rseq
+
+These syscalls were not shown properly causing confusion about what
+was happening.
+
+Note: rebased for scarthgap qemu 8.2.7.
+
+Upstream-Status: Inappropriate [NXP S32 / ubuntu rootfs support only]
+Signed-off-by: Heinz Wrobel <Heinz.Wrobel@nxp.com>
+---
+ linux-user/strace.c    |  XX +++
+ linux-user/strace.list |  XX ++++++
+ 2 files changed, XXX insertions(+), 0 deletions(-)
+
+diff --git a/linux-user/strace.c b/linux-user/strace.c
+--- a/linux-user/strace.c
++++ b/linux-user/strace.c
+@@ -758,6 +758,31 @@
+ }
+ #endif
+ 
++#if defined(TARGET_NR_pipe) || defined(TARGET_NR_pipe2)
++static void
++print_syscall_ret_pipe(void *cpu_env, const struct syscallname *name,
++                       abi_long ret, abi_long arg0, abi_long arg1,
++                       abi_long arg2, abi_long arg3, abi_long arg4,
++                       abi_long arg5)
++{
++    if (!print_syscall_err(ret)) {
++        const int *pipefd;
++        qemu_log(TARGET_ABI_FMT_ld, ret);
++        pipefd = lock_user(VERIFY_READ, arg0, 2*sizeof(int), 1);
++        if (pipefd) {
++            qemu_log(" (");
++            qemu_log("%d", pipefd[0]);
++            qemu_log(",");
++            qemu_log("%d", pipefd[1]);
++            qemu_log(")");
++            unlock_user(pipefd, arg0, 0);
++        }
++    }
++
++    qemu_log("\n");
++}
++#endif
++
+ #ifdef TARGET_NR__newselect
+ static void
+ print_syscall_ret_newselect(CPUArchState *cpu_env, const struct syscallname *name,
+@@ -2107,6 +2132,21 @@
+ }
+ #endif
+ 
++#ifdef TARGET_NR_faccessat2
++static void
++print_faccessat2(void *cpu_env, const struct syscallname *name,
++                 abi_long arg0, abi_long arg1, abi_long arg2,
++                 abi_long arg3, abi_long arg4, abi_long arg5)
++{
++    print_syscall_prologue(name);
++    print_at_dirfd(arg0, 0);
++    print_string(arg1, 0);
++    print_flags(access_flags, arg2, 0);
++    print_flags(at_file_flags, arg3, 1);
++    print_syscall_epilogue(name);
++}
++#endif
++
+ #ifdef TARGET_NR_fallocate
+ static void
+ print_fallocate(CPUArchState *cpu_env, const struct syscallname *name,
+@@ -4202,6 +4242,21 @@
+     print_syscall_epilogue(name);
+ }
+ #endif
++
++#ifdef TARGET_NR_rseq
++static void
++print_rseq(void *cpu_env, const struct syscallname *name,
++            abi_long arg0, abi_long arg1, abi_long arg2,
++            abi_long arg3, abi_long arg4, abi_long arg5)
++{
++    print_syscall_prologue(name);
++    print_pointer(arg0, 0);
++    print_raw_param("%d", arg1, 0);
++    print_raw_param("%d", arg2, 0);
++    print_raw_param("%d", arg3, 1);
++    print_syscall_epilogue(name);
++}
++#endif
+ 
+ /*
+  * An array of all of the syscalls we know about
+
+diff --git a/linux-user/strace.list b/linux-user/strace.list
+--- a/linux-user/strace.list
++++ b/linux-user/strace.list
+@@ -187,6 +187,9 @@
+ #ifdef TARGET_NR_faccessat2
+ { TARGET_NR_faccessat2, "faccessat2" , NULL, print_faccessat, NULL },
+ #endif
++#ifdef TARGET_NR_faccessat2
++{ TARGET_NR_faccessat2, "faccessat2" , NULL, print_faccessat2, NULL },
++#endif
+ #ifdef TARGET_NR_fadvise64
+ { TARGET_NR_fadvise64, "fadvise64" , NULL, NULL, NULL },
+ #endif
+@@ -1053,7 +1056,7 @@
+   print_syscall_ret_addr },
+ #endif
+ #ifdef TARGET_NR_pipe
+-{ TARGET_NR_pipe, "pipe" , NULL, NULL, NULL },
++{ TARGET_NR_pipe, "pipe" , NULL, NULL, print_syscall_ret_pipe },
+ #endif
+ #ifdef TARGET_NR_pivot_root
+ { TARGET_NR_pivot_root, "pivot_root" , NULL, NULL, NULL },
+@@ -1179,6 +1182,9 @@
+ #ifdef TARGET_NR_rmdir
+ { TARGET_NR_rmdir, "rmdir" , NULL, NULL, NULL },
+ #endif
++#ifdef TARGET_NR_rseq
++{ TARGET_NR_rseq, "rseq" , NULL, print_rseq, NULL },
++#endif
+ #ifdef TARGET_NR_rt_sigaction
+ { TARGET_NR_rt_sigaction, "rt_sigaction" , NULL, print_rt_sigaction, NULL },
+ #endif
+@@ -1683,7 +1689,7 @@
+ { TARGET_NR_sync_file_range2, "sync_file_range2", NULL, NULL, NULL },
+ #endif
+ #ifdef TARGET_NR_pipe2
+-{ TARGET_NR_pipe2, "pipe2", "%s(%p,%d)", NULL, NULL },
++{ TARGET_NR_pipe2, "pipe2", "%s(%p,%d)", NULL, print_syscall_ret_pipe },
+ #endif
+ #ifdef TARGET_NR_pidfd_open
+ { TARGET_NR_pidfd_open, "pidfd_open", "%s(%d,%u)", NULL, NULL },
+-- 
+2.34.1
+
