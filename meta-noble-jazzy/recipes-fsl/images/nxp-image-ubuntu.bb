@@ -1,6 +1,12 @@
 # A more complex image with customer required setup
 require nxp-image-ubuntu-base.bb
 
+IMAGE_INSTALL:append = " \
+	canfestival \
+	libmodbus \
+	modbus-simulator \
+"
+
 # At this time x2go is not available for all versions, so we
 # also show how to do a VNC alternative.
 APTGET_EXTRA_PPA += '${@ \

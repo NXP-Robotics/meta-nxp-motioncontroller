@@ -62,10 +62,11 @@ APTGET_EXTRA_SOURCE_PACKAGES += "\
 	iproute2 \
 "
 
-# Add user ubuntu with password ubuntu and default shell bash
+# Add user with password user and default shell bash
 USER_SHELL_BASH = "/bin/bash"
-USER_PASSWD_UBUNTU = "ubR3Twh1k5PQE"
-APTGET_ADD_USERS = "ubuntu:${USER_PASSWD_UBUNTU}:${USER_SHELL_BASH}"
+# Password: user
+USER_PASSWD_UBUNTU = "zHipsIr46vtZk"
+APTGET_ADD_USERS = "user:${USER_PASSWD_UBUNTU}:${USER_SHELL_BASH}"
 
 HOST_NAME = "ubuntu-${MACHINE_ARCH}"
 

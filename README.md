@@ -22,7 +22,7 @@ Download the Yocto Project BSP for i.MX
 ```
 $ mkdir motioncontroller
 $ cd motioncontroller
-$ repo init -u https://github.com/nxp-auto-linux/auto_yocto_bsp -b release/s32n7_bsp3.0 -m default.xml
+$ repo init -u https://github.com/nxp-auto/grayvip-manifests -b release/GrayVIP-1.0.6.4 -m default.xml
 $ repo sync
 ```
 
@@ -32,13 +32,13 @@ Create a _new_ build folder
 If you want to create a _new_ build folder for Ubuntu 22.04 (Jammy) with ROS 2 Humble:
 
 ```
-$ source sources/meta-nxp-motioncontroller/meta-jammy-humble/tools/nxp-setup-motioncontroller.sh -m s32n79rdbubuntu
+$ source sources/meta-nxp-motioncontroller/meta-jammy-humble/tools/nxp-setup-motioncontroller.sh -D fsl-grayvip -m s32n79rdbubuntu -p hw-partition-1.1.5
 ```
 
 or Ubutu 24.04 (Noble) with ROS 2 Jazzy:
 
 ```
-$ source sources/meta-nxp-motioncontroller/meta-noble-jazzy/tools/nxp-setup-motioncontroller.sh -m s32n79rdbubuntu
+$ source sources/meta-nxp-motioncontroller/meta-noble-jazzy/tools/nxp-setup-motioncontroller.sh -D fsl-grayvip -m s32n79rdbubuntu -p hw-partition-1.1.5
 ```
 
 Note: The available build MACHINEs for below boards:
@@ -53,13 +53,13 @@ If you want to build in an _existing_ build folder for Ubuntu 22.04 (Jammy) with
 
 ```
 $ cd motioncontroller
-$ source sources/meta-nxp-motioncontroller/meta-jammy-humble/tools/setup-environment build_s32n79rdbubuntu_hw-partition-1.2.1
+$ source sources/meta-nxp-motioncontroller/meta-jammy-humble/tools/setup-environment build_s32n79rdbubuntu_hw-partition-1.1.5
 ```
 
 or Ubutu 24.04 (Noble) with ROS 2 Jazzy:
 
 ```
-$ source sources/meta-nxp-motioncontroller/meta-noble-jazzy/tools/setup-environment build_s32n79rdbubuntu_hw-partition-1.2.1
+$ source sources/meta-nxp-motioncontroller/meta-noble-jazzy/tools/setup-environment build_s32n79rdbubuntu_hw-partition-1.1.5
 ```
 
 Build the image for s32n79rdb

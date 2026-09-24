@@ -28,6 +28,12 @@ IMAGE_INSTALL:append = " \
 	iperf2 \
 "
 
+IMAGE_INSTALL:append = " \
+	canfestival \
+	libmodbus \
+	modbus-simulator \
+"
+
 # Installing Java is a bit of loaded topic because it is version
 # dependent. We default to the Java version based on the Ubuntu version
 JAVAVERSION = '${@ \
