@@ -1,14 +1,14 @@
-## real-time-edge-modbus-simulator
-### real-time-edge-modbus-simulator Introduction
+## modbus-simulator
+### modbus-simulator Introduction
 
 MODBUS is a communication protocol located at the application layer of the OSI seven-layer model, that 
 provides client/server communication between devices connected on different types of buses or networks. 
 
-real-time-edge-modbus-simulator is a Modbus simulator running on Linux, I.MX8MM  and I.MX8MP boards.
+modbus-simulator is a Modbus simulator running on Linux, I.MX8MM  and I.MX8MP boards.
 
 It is based on the libmodbus open source library and implements Modbus-device-simulator and Modbus-client-simulator. 
 
-real-time-edge-modbus-simulator supports both TCP and RTU modes, and each mode supports the following functions.
+modbus-simulator supports both TCP and RTU modes, and each mode supports the following functions.
 
 #### Features supported by TCP:
 	-Get CPU temperature of device.
@@ -22,7 +22,7 @@ real-time-edge-modbus-simulator supports both TCP and RTU modes, and each mode s
 	-Modify the slave address of the device.
 	-Modify the baud rate of the device.
 
-### real-time-edge-modbus-simulator Usage
+### modbus-simulator Usage
 
 #### SYNOPSIS
 	{modbus_device_simulator|modbus_client_simulator} [OPTION]… {RTU-PARAMS|TCP-PARAMS}… {SERIALPORT|HOST}… [WRITE-DATA]… 
@@ -100,7 +100,7 @@ real-time-edge-modbus-simulator supports both TCP and RTU modes, and each mode s
 	modbus_client_simulator --debug -m rtu -a 6 -t 0x06 -r 1 -b 3 -p none /dev/ttyUSB0 1
 				Change modbus_device_simulator baud rate from 115200 to 9600.
 
-### real-time-edge-modbus-simulator Test
+### modbus-simulator Test
 Use two i.MX8MP boards to test the function of the modebus-simulator.
 ![10000001](_images\10000001.png)
 
