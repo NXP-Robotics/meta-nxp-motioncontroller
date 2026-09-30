@@ -1,8 +1,8 @@
-NXP Linux Yocto Project BSP for Desktop PoC (Proof of Concept)
+NXP Linux Yocto Project for “Cerebellum” (aka motion controller) of Humandoid Robot PoC (Proof of Concept)
 ===============================================================
 
 This README contains instructions for setting up a Yocto build
-for the Desktop PoC release image.
+for the PoC release image.
 
 Install the `repo` utility
 --------------------------
@@ -16,7 +16,7 @@ $ chmod a+x ~/bin/repo
 $ PATH=${PATH}:~/bin
 ```
 
-Download the Yocto Project BSP for i.MX
+Download the Yocto Project BSP for S32N7x
 ------------------------------
 
 ```
@@ -72,7 +72,7 @@ $ bitbake -k nxp-image-ubuntu-ros2
 
 Notice
 ---------------
-The default PoC build will create the account "user" with the password "user" for desktop evaluation.<br />
+The default PoC build will create the account "user" with the password "user" for motion controller evaluation.<br />
 
 If you want to add multiple account, you can set as below in <build_dir>/conf/local.conf. (every user setting should be splitted by a space).
 
