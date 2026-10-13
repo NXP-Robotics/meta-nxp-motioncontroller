@@ -1,0 +1,767 @@
+{
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "spdxVersion": "SPDX-2.3",
+  "creationInfo": {
+    "created": "2026-10-13T10:11:18Z",
+    "creators": [
+      "Organization: NXP"
+    ],
+    "licenseListVersion": "3.28"
+  },
+  "name": "meta-nxp-motioncontroller-1.0",
+  "dataLicense": "CC0-1.0",
+  "hasExtractedLicensingInfos": [
+    {
+      "name": "Sun RPC License",
+      "licenseId": "LicenseRef-db347aff-ef3e-4ca6-9733-708c75086be2",
+      "extractedText": "Sun RPC License\n===============\n\nSun RPC is a product of Sun Microsystems, Inc. and is provided for unrestricted\nuse provided that this legend is included on all tape media and as a part of the\nsoftware program in whole or part. Users may copy or modify Sun RPC without\ncharge, but are not authorized to license or distribute it to anyone else except\nas part of a product or program developed by the user or with the express written\nconsent of Sun Microsystems, Inc.\n\nSUN RPC IS PROVIDED AS IS WITH NO WARRANTIES OF ANY KIND INCLUDING THE WARRANTIES\nOF DESIGN, MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE, OR ARISING FROM\nA COURSE OF DEALING, USAGE OR TRADE PRACTICE.\n\nSun RPC is provided with no support and without any obligation on the part of Sun\nMicrosystems, Inc. to assist in its use, correction, modification or enhancement.\n\nSUN MICROSYSTEMS, INC. SHALL HAVE NO LIABILITY WITH RESPECT TO THE INFRINGEMENT\nOF COPYRIGHTS, TRADE SECRETS OR ANY PATENTS BY SUN RPC OR ANY PART THEREOF.\n\nIn no event will Sun Microsystems, Inc. be liable for any lost revenue or profits\nor other special, indirect and consequential damages, even if Sun has been\nadvised of the possibility of such damages.\n\nSun Microsystems, Inc.\n2550 Garcia Avenue\nMountain View, California 94043"
+    }
+  ],
+  "documentNamespace": "https://nxp.com/spdx/26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "name": "meta-nxp-motioncontroller",
+      "versionInfo": "1.0",
+      "licenseConcluded": "(MIT)",
+      "licenseDeclared": "(MIT)",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: meta-nxp-motioncontroller",
+      "supplier": "NOASSERTION",
+      "externalRefs": [],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---da75c27d-6bd8-4b81-8cda-d054bbe216a5",
+      "name": "GNU C Library",
+      "versionInfo": "2.28",
+      "licenseConcluded": "(GPL-2.0-only AND LGPL-2.1-or-later)",
+      "licenseDeclared": "(GPL-2.0-only AND LGPL-2.1-or-later)",
+      "homepage": "http://www.gnu.org/software/libc/",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: yocto",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "42e2bcc8-7de0-480d-8d95-bf0f43b6dcdd",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:almalinux_package:glibc-common:2.28:*:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:almalinux_package:glibc-common:2.28:127.el8:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:almalinux_package:glibc-common:2.28:127.el8_3.2:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:almalinux_package:glibc-common:2.28:148.el8:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:almalinux_package:glibc-common:2.28:151.el8:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:yocto/nativesdk-libnss-db2@2.28-r0.0?arch=x86_64-nativesdk",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---956d01eb-c11f-4e50-acf6-31d5553e3ead",
+      "name": "GNU C Library",
+      "versionInfo": "2.3.2",
+      "licenseConcluded": "LGPL-3.0-or-later",
+      "licenseDeclared": "LGPL-3.0-or-later",
+      "homepage": "http://www.gnu.org/software/libc/",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: centos",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "37ea396e-e239-4b00-bcfb-b54ee563c8fa",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:debian_package:glibc:2.3.2.ds1:22sarge6:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:debian_package:libc6-dbg:2.3.2.ds1:22sarge6:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:debian_package:libc6-dev-s390x:2.3.2.ds1:22sarge6:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:debian_package:libc6-dev-sparc64:2.3.2.ds1:22sarge6:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:debian_package:libc6-dev:2.3.2.ds1:22sarge6:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:rpm/centos/glibc@2.3.2-95.6?arch=x86_64",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---b745aca3-fe9d-4ab9-b957-41af24b3e556",
+      "name": "GNU C Library",
+      "versionInfo": "cvs/fedora-glibc-20070731T1624",
+      "licenseConcluded": "(BSD-3-Clause AND CMU-Mach AND GPL-2.0-or-later AND ISC AND LGPL-2.1-or-later AND LicenseRef-db347aff-ef3e-4ca6-9733-708c75086be2)",
+      "licenseDeclared": "(BSD-3-Clause AND CMU-Mach AND GPL-2.0-or-later AND ISC AND LGPL-2.1-or-later AND LicenseRef-db347aff-ef3e-4ca6-9733-708c75086be2)",
+      "homepage": "http://www.gnu.org/software/libc/",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: gentoo",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "2c3dcf6b-c6b7-4f1d-ac9d-595c6296e4a1",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/gentoo/glibc@cvs/fedora-glibc-20070731T1624",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---50b3b32e-b1c9-42ac-a1e4-a8a661c76d5b",
+      "name": "GNU C Library",
+      "versionInfo": "cvs/fedora-glibc-20070814T0643",
+      "licenseConcluded": "(BSD-3-Clause AND CMU-Mach AND GPL-2.0-or-later AND ISC AND LGPL-2.1-or-later AND LicenseRef-db347aff-ef3e-4ca6-9733-708c75086be2)",
+      "licenseDeclared": "(BSD-3-Clause AND CMU-Mach AND GPL-2.0-or-later AND ISC AND LGPL-2.1-or-later AND LicenseRef-db347aff-ef3e-4ca6-9733-708c75086be2)",
+      "homepage": "http://www.gnu.org/software/libc/",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: long_tail",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "2dd45bfe-85b5-4184-a59a-4f2ed8d7d1b5",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---98eb1a91-a3d5-43d7-897c-0bcc30cf240e",
+      "name": "GNU C Library",
+      "versionInfo": "cvs/fedora-glibc-20071014T1847",
+      "licenseConcluded": "(BSD-3-Clause AND CMU-Mach AND GPL-2.0-or-later AND ISC AND LGPL-2.1-or-later AND LicenseRef-db347aff-ef3e-4ca6-9733-708c75086be2)",
+      "licenseDeclared": "(BSD-3-Clause AND CMU-Mach AND GPL-2.0-or-later AND ISC AND LGPL-2.1-or-later AND LicenseRef-db347aff-ef3e-4ca6-9733-708c75086be2)",
+      "homepage": "http://www.gnu.org/software/libc/",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: gentoo",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "2392e040-53b0-4d6e-9197-7a3d164fb463",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/gentoo/glibc@cvs/fedora-glibc-20071014T1847",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---c7c160c7-4750-43b3-bf80-3666f972e4b3",
+      "name": "GNU C Library",
+      "versionInfo": "cvs/post-lgplv2_1",
+      "licenseConcluded": "(GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later)",
+      "licenseDeclared": "(GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later)",
+      "homepage": "http://www.gnu.org/software/libc/",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: gentoo",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "9011bf89-4859-43ca-af1f-a92b7765e07a",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/gentoo/glibc@cvs/post-lgplv2_1",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---9c065380-b12e-4796-b6f2-9f04c3629712",
+      "name": "nxp-auto-linux/meta-alb",
+      "versionInfo": "bsp26.0",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: nxp-auto-linux",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "7f918ea1-f828-496a-8b4b-5d2ff55ac327",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/nxp-auto-linux/meta-alb@bsp26.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---727bb1a5-8543-440b-b064-6e136a79a4bd",
+      "name": "nxp-auto-linux/meta-alb",
+      "versionInfo": "bsp36.0_cd-4.0",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: nxp-auto-linux",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "a1544193-7dbb-462c-b4b4-f07fe57ec2f4",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/nxp-auto-linux/meta-alb@bsp36.0_cd-4.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---a766a0cd-32fb-4cc3-ab2b-c55b56f56436",
+      "name": "nxp-auto-linux/meta-alb",
+      "versionInfo": "bsp37.0-4.0",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: nxp-auto-linux",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "22272e51-6243-467a-90fa-ee56841cd835",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/nxp-auto-linux/meta-alb@bsp37.0-4.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---0e04be45-2bb8-48d3-8121-79903632a95e",
+      "name": "nxp-auto-linux/meta-alb",
+      "versionInfo": "s32n7_bsp3.0-5.0",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: nxp-auto-linux",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "3fcdff74-b7f3-4410-b44b-9b86e2dfa26a",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/nxp-auto-linux/meta-alb@s32n7_bsp3.0-5.0",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---2e14620b-ad61-4896-8494-2281d0667356",
+      "name": "openbmc/openbmc",
+      "versionInfo": "2.9.0-dev",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: openbmc",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:openbmc-project:openbmc:2.9.0:dev:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "e3a7a718-06af-408e-a82e-238669d3d720",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/openbmc/openbmc@2.9.0-dev",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---7889a31e-605f-4d5b-94e9-eab3bfb35163",
+      "name": "OpenEmbedded",
+      "versionInfo": "2019-10.1-zeus",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: long_tail",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "ac46f6c7-dbc4-4e64-aedd-002c16040831",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---b4903910-11d7-4e5c-9152-71e260bb70bc",
+      "name": "OpenEmbedded",
+      "versionInfo": "2020-04-dunfell",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: long_tail",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "1521c469-3d7e-4508-a9bd-c1f1ea67a306",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---c952625b-8836-42ce-b137-fd950f19ee3c",
+      "name": "OpenEmbedded",
+      "versionInfo": "uninative-1.5",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: openembedded",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "ef743cac-5108-4cdf-a7fc-afd56326a8b0",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/openembedded/openembedded-core@uninative-1.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---73487fd9-232a-4972-b2d2-1824e5e005eb",
+      "name": "OpenEmbedded",
+      "versionInfo": "uninative-1.7",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: openembedded",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "beff8cc6-48a1-43c8-933d-b58f1e5e0a1e",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/openembedded/openembedded-core@uninative-1.7",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---8c122536-7652-448d-8a6c-61b6938b6f6d",
+      "name": "OpenEmbedded",
+      "versionInfo": "uninative-2.7",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: openembedded",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "50a48b43-0610-40ff-a96e-13edcd084574",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/openembedded/openembedded-core@uninative-2.7",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---6a6f7c5d-4d91-4a69-b0a9-4670d19723cf",
+      "name": "OpenEmbedded",
+      "versionInfo": "uninative-3.3",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: openembedded",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "39bf7aa1-3b95-4559-8060-51afaee8d343",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/openembedded/openembedded-core@uninative-3.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---ebbb80d3-9458-4eb1-ba90-4fadb2246daa",
+      "name": "OpenEmbedded",
+      "versionInfo": "uninative-3.4",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: openembedded",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "482cc1e4-b2bd-45ec-aaaa-3eacc3252a37",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/openembedded/openembedded-core@uninative-3.4",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---c8e997dd-5c2f-4b6b-9478-245ce4d2ae68",
+      "name": "OpenEmbedded",
+      "versionInfo": "uninative-3.5",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: openembedded",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "9c2bf559-01f8-4788-8733-37d5bfffab39",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/openembedded/openembedded-core@uninative-3.5",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---0d4b3de2-ac96-43fd-b5d8-375c24214b2c",
+      "name": "OpenEmbedded",
+      "versionInfo": "uninative-3.6",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: long_tail",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "40be3ca9-d492-47cc-9607-ab3f373dbb30",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---48c951d4-a155-4c21-9caf-8d826846078e",
+      "name": "OpenEmbedded",
+      "versionInfo": "yocto-4.0",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://www.openembedded.org/wiki/Main_Page",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: long_tail",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "90d6322f-fd09-48cb-9b94-b19420f8a2f0",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---716e0a44-b72e-4ed6-bcd7-d665ca73519d",
+      "name": "Ostro Project",
+      "versionInfo": "20160914-snapshot-8afa0657",
+      "licenseConcluded": "GPL-2.0-or-later",
+      "licenseDeclared": "GPL-2.0-or-later",
+      "homepage": "https://ostroproject.org",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: ostroproject",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "2028f80f-9682-481b-b5f8-859af9f96a72",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/ostroproject/ostro-os@8afa0657400bdc5a13ecca248e0adfa9ae094933",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---e8701a38-9aae-415a-8cf1-8f5662055fff",
+      "name": "stephane/libmodbus",
+      "versionInfo": "v2.9.3",
+      "licenseConcluded": "LGPL-2.1-or-later",
+      "licenseDeclared": "LGPL-2.1-or-later",
+      "homepage": "https://github.com/stephane/libmodbus",
+      "downloadLocation": "NOASSERTION",
+      "originator": "Organization: stephane",
+      "supplier": "NOASSERTION",
+      "externalRefs": [
+        {
+          "referenceCategory": "OTHER",
+          "referenceLocator": "b29672df-c5e4-48d5-94e6-ce5052d3241a",
+          "referenceType": "BlackDuck-ComponentOrigin"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:libmodbus:libmodbus:2.9.3:*:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "SECURITY",
+          "referenceLocator": "cpe:2.3:a:stephane:libmodbus:2.9.3:*:*:*:*:*:*:*",
+          "referenceType": "cpe23Type"
+        },
+        {
+          "referenceCategory": "PACKAGE-MANAGER",
+          "referenceLocator": "pkg:github/stephane/libmodbus@v2.9.3",
+          "referenceType": "purl"
+        }
+      ],
+      "filesAnalyzed": false
+    }
+  ],
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-DOCUMENT",
+      "relationshipType": "DESCRIBES",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---0d4b3de2-ac96-43fd-b5d8-375c24214b2c",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---0e04be45-2bb8-48d3-8121-79903632a95e",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---2e14620b-ad61-4896-8494-2281d0667356",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---48c951d4-a155-4c21-9caf-8d826846078e",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---50b3b32e-b1c9-42ac-a1e4-a8a661c76d5b",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---6a6f7c5d-4d91-4a69-b0a9-4670d19723cf",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---716e0a44-b72e-4ed6-bcd7-d665ca73519d",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---727bb1a5-8543-440b-b064-6e136a79a4bd",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---73487fd9-232a-4972-b2d2-1824e5e005eb",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---7889a31e-605f-4d5b-94e9-eab3bfb35163",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---8c122536-7652-448d-8a6c-61b6938b6f6d",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---956d01eb-c11f-4e50-acf6-31d5553e3ead",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---98eb1a91-a3d5-43d7-897c-0bcc30cf240e",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---9c065380-b12e-4796-b6f2-9f04c3629712",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---a766a0cd-32fb-4cc3-ab2b-c55b56f56436",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---b4903910-11d7-4e5c-9152-71e260bb70bc",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---b745aca3-fe9d-4ab9-b957-41af24b3e556",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---c7c160c7-4750-43b3-bf80-3666f972e4b3",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---c8e997dd-5c2f-4b6b-9478-245ce4d2ae68",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---c952625b-8836-42ce-b137-fd950f19ee3c",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---da75c27d-6bd8-4b81-8cda-d054bbe216a5",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---e8701a38-9aae-415a-8cf1-8f5662055fff",
+      "comment": "Separate Work"
+    },
+    {
+      "spdxElementId": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa",
+      "relationshipType": "OTHER",
+      "relatedSpdxElement": "SPDXRef-package-26958088-d96b-48e8-a6e4-d6cbcc71e4fa---ebbb80d3-9458-4eb1-ba90-4fadb2246daa",
+      "comment": "Separate Work"
+    }
+  ]
+}
