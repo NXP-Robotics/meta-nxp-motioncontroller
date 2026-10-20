@@ -69,6 +69,27 @@ Build the image for s32n79rdb
 $ bitbake -k nxp-image-ubuntu-ros2
 ```
 
+Basic Functionality Testing
+---------------
+
+If you want to have some basic testing on Ubuntu 22.04 (Jammy) with ROS 2 Humble, you can following the ROS2 documentation (https://docs.ros.org/en/humble/index.html) and do the basic testing as below:
+```
+$ source /opt/ros/humble/setup.sh
+$ echo $LD_LIBRARY_PATH
+$ ros2 topic list
+$ ros2 interface list
+$ (sleep 2; ros2 topic pub /chatter std_msgs/String "data: Hello world") &
+$ ros2 topic echo /chatter
+$ ros2 run demo_nodes_cpp talker --ros-args --enclave /talker_listener/talker
+$ ros2 run demo_nodes_cpp listener --ros-args --enclave /talker_listener/listener
+```
+MobaXterm can be used to connect to the target board via SSH, and start RVIZ2 remotely.
+```
+$ source /opt/ros/humble/setup.sh
+$ ros2 run rviz2 rviz2
+```
+And for several motor control communication protocols, you can refer to online documentation, Modbus https://docs.nxp.com/bundle/REALTIMEEDGEUG/page/topics/protocols/modbus.html, for Canopen https://canfestival.org/doc.
+
 
 Notice
 ---------------
